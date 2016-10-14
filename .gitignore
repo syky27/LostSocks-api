@@ -1,0 +1,4 @@
+Packages
+.build
+*.xcodeproj
+/Config/secrets
