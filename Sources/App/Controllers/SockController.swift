@@ -10,7 +10,7 @@ import HTTP
 import Vapor
 
 final class SockController: ResourceRepresentable {
-	func index(request: Request) throws -> ResponseRepresentable{
+	func index(request: Request) throws -> ResponseRepresentable {
 		return try Sock.all().makeNode().converted(to: JSON.self)
 	}
 

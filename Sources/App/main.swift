@@ -1,28 +1,15 @@
 import Vapor
+import VaporMySQL
 
-let drop = Droplet()
+let drop = Droplet(
+	availableMiddleware: ["cors" : CorsMiddleware()],
+	serverMiddleware: ["file", "cors"],
+	preparations: [Sock.self],
+	providers: [VaporMySQL.Provider.self])
 
-drop.post("sock") { request in
-	guard let desc = request.data["description"]?.string else {
-		throw Abort.badRequest
-	}
+// MARK: /socks/
+drop.grouped(SockURLMiddleware()).resource("socks", SockController())
 
-	guard let name = request.data["name"]?.string else {
-		throw Abort.badRequest
-	}
-
-	guard let img = request.data["img"]?.string else {
-		throw Abort.badRequest
-	}
-
-	guard let time = request.data["time"]?.int else {
-		throw Abort.badRequest
-	}
-
-
-	return name
-
-}
 
 
 drop.run()
