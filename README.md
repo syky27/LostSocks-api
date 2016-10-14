@@ -1,15 +1,13 @@
-# Basic Template
+# Lost Socks
 
-A basic vapor template for starting a new Vapor web application. If you're using vapor toolbox, you can use: `vapor new --template=basic`
+This API serves for finding your lost socks which disappear randomly
 
-## 📖 Documentation
+It is created in swift usign Vapor 💧
+
+Vapor 📖 Documentation
 
 Visit the Vapor web framework's [documentation](http://docs.vapor.codes) for instructions on how to use this package.
 
-## 💧 Community
+Vapor 💧 Community
 
 Join the welcoming community of fellow Vapor developers in [slack](http://vapor.team).
-
-## 🔧 Compatibility
-
-This package has been tested on macOS and Ubuntu.
