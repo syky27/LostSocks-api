@@ -55,13 +55,12 @@ drop.post("register") { request in
 			throw Abort.custom(status: Status.badRequest, message: "You need to provide username and password, in order to register")
 	}
 
-
 	let credentials = UsernamePassword(username: username, password: password)
 
 	do {
 		let user = try DemoUser.register(credentials: credentials)
 		try request.auth.login(credentials)
-		return Response(redirect: "/")
+		return try JSON(node: ["links" : ["login" : "http://localhost:8080/login"]])
 	} catch let e as TurnstileError {
 		return try JSON(node: [
 			"Exception raised": e.description
