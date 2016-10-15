@@ -17,9 +17,6 @@ let drop = Droplet(
 	preparations: [Sock.self, DemoUser.self],
 	providers: [VaporMySQL.Provider.self])
 
-// MARK: /socks/
-drop.grouped(SockURLMiddleware()).resource("socks", SockController())
-
 
 drop.get("login") { request in
 	return try drop.view.make("login")
@@ -40,7 +37,8 @@ drop.post("login") { request in
 			.first()
 
 
-		return fetchedUser!.json()
+		return try JSON(node: request.user().makeNode())
+
 	} catch let e {
 		return try JSON(node: [
 			"Exception raised": e.localizedDescription
@@ -71,13 +69,18 @@ drop.post("register") { request in
 /**
 API Endpoint for /me
 */
-let protect = ProtectMiddleware(error: Abort.custom(status: .unauthorized, message: "Unauthorized"))
+let protect = ProtectMiddleware(error: Abort.custom(status: .unauthorized, message: "Unauthorized 🖕"))
 
 drop.grouped(BasicAuthenticationMiddleware(), protect).group("api") { api in
 	api.get("me") { request in
 		return try JSON(node: request.user().makeNode())
 	}
 }
+
+// MARK: /socks/
+drop.grouped(SockURLMiddleware(), protect).resource("socks", SockController())
+drop.grouped(SockURLMiddleware()).resource("socks", SockController())
+
 
 
 drop.run()
