@@ -10,30 +10,36 @@ import HTTP
 import Vapor
 
 final class SockController: ResourceRepresentable {
+	// GET [/socks]
 	func index(request: Request) throws -> ResponseRepresentable {
 		return try Sock.all().makeNode().converted(to: JSON.self)
 	}
 
+	// POST [/socks]
 	func create(request: Request) throws -> ResponseRepresentable {
 		var sock = try request.sock()
 		try sock.save()
 		return sock
 	}
 
+	// GET [/socks/1
 	func show(request: Request, sock: Sock) throws -> ResponseRepresentable {
 		return sock
 	}
 
+	// DELETE [/socks/1]
 	func delete(request: Request, sock: Sock) throws -> ResponseRepresentable {
 		try sock.delete()
 		return JSON([:])
 	}
 
+	// DELETE [/socks]
 	func clear(request: Request) throws -> ResponseRepresentable {
 		try Sock.deleteAll()
 		return JSON([])
 	}
 
+	// PATCH [/socks/1]
 	func update(request: Request, sock: Sock) throws -> ResponseRepresentable {
 		let new = try request.sock()
 		var sock = sock
@@ -42,6 +48,7 @@ final class SockController: ResourceRepresentable {
 		return sock
 	}
 
+	// PUT [/socks/1]
 	func replace(request: Request, sock: Sock) throws -> ResponseRepresentable {
 		try sock.delete()
 		return try create(request: request)
