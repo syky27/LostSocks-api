@@ -75,6 +75,17 @@ final class SockController: ResourceRepresentable {
 	}
 
 	func sorted(request: Request) throws -> ResponseRepresentable {
+//		let json = try! JSON(node: [["username" : "name",
+//		                             "password" : "password"], [
+//										"username" : "name",
+//										"password" : "password"]])
+//		for j in json.array! {
+//			let user = try!
+//
+//
+//
+//		}
+
 		guard let lat = request.json?["lat"]?.double,
 			let lon = request.json?["lon"]?.double else {
 			throw Abort.badRequest
@@ -89,6 +100,36 @@ final class SockController: ResourceRepresentable {
 
 	func toRad(degree: Double) -> Double {
 		return (degree * 3.14) / 180
+	}
+
+	func multiple(request: Request) -> ResponseRepresentable {
+
+		do {
+		guard let json = request.json else {
+			throw Abort.badRequest
+		}
+
+		guard let array = json.makeNode().nodeArray else {
+			throw Abort.badRequest
+		}
+
+
+			for a in array {
+				var new = try! Sock(node: a)
+				let user = try! request.user()
+				new.demouser_id = user.id
+				try! new.save()
+				
+			}
+
+
+		} catch {
+			return try! JSON(node: ["fail":"fail"])
+		}
+
+
+
+		return try! JSON(node: ["ok":"ok"])
 	}
 
 
