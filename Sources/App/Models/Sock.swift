@@ -88,10 +88,17 @@ extension Sock {
 	}
 
 	func distance(lat: Double, lon: Double) -> Double {
+
+		// This is workaround when the GPS location is missing
+		guard let localLat = self.lat,
+			let localLon = self.lon else {
+				return Double(INT64_MAX)
+		}
+
 		let R = 6371.0
-		let dLat = (lat - self.lat!) * 3.14 / 180
-		let dLon = (lon - self.lon!) * 3.14 / 180
-		let latRad1 = self.lat! * 3.14 / 180
+		let dLat = (lat - localLat) * 3.14 / 180
+		let dLon = (lon - localLon) * 3.14 / 180
+		let latRad1 = localLat * 3.14 / 180
 		let latRad2 = lat * 3.14 / 180
 
 		let a1 = sin(dLat/2) * sin(dLat/2)
