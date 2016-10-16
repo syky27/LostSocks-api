@@ -10,6 +10,7 @@ struct Sock: Model {
 	var time: Int?
 	var lat: Double?
 	var lon: Double?
+	var demouser_id: Node?
 
 	var exists: Bool = false
 
@@ -26,6 +27,7 @@ extension Sock: NodeConvertible {
 		time = node["time"]?.int
 		lat = node["lat"]?.double
 		lon = node["lon"]?.double
+		demouser_id = node["demouser_id"]
 	}
 
 	func makeNode(context: Context) throws -> Node {
@@ -40,7 +42,8 @@ extension Sock: NodeConvertible {
 				"img": img,
 				"time": time,
 				"lat" : lat,
-				"lon" : lon
+				"lon" : lon,
+				"demouser_id" : demouser_id
 			]
 		)
 	}
@@ -56,6 +59,8 @@ extension Sock: Preparation {
 			socks.double("lat", optional: true)
 			socks.double("lon", optional: true)
 			socks.int("time", optional: true)
+			socks.parent(DemoUser.self, optional: false)
+			
 		}
 	}
 
@@ -73,5 +78,11 @@ extension Sock {
 		time = updates.time ?? time
 		lat = updates.lat ?? lat
 		lon = updates.lon ?? lon
+	}
+}
+
+extension Sock {
+	func user() throws -> Parent<DemoUser> {
+		return try parent(demouser_id, nil, DemoUser.self)
 	}
 }

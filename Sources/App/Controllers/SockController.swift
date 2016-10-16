@@ -17,7 +17,10 @@ final class SockController: ResourceRepresentable {
 
 	// POST [/socks]
 	func create(request: Request) throws -> ResponseRepresentable {
+		let user  = try request.user()
+		print(user.json())
 		var sock = try request.sock()
+		sock.demouser_id = user.id
 		try sock.save()
 		return sock
 	}

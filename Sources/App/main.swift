@@ -14,7 +14,7 @@ let auth = AuthMiddleware<DemoUser>()
 let drop = Droplet(
 	availableMiddleware: ["cors" : CorsMiddleware(), "auth": auth, "trustProxy": TrustProxyMiddleware()],
 	serverMiddleware: ["file", "cors", "auth", "trustProxy"],
-	preparations: [Sock.self, DemoUser.self],
+	preparations: [Sock.self, DemoUser.self, Pivot<Sock, DemoUser>.self],
 	providers: [VaporMySQL.Provider.self])
 
 
@@ -58,7 +58,7 @@ drop.post("register") { request in
 	do {
 		let user = try DemoUser.register(credentials: credentials)
 		try request.auth.login(credentials)
-		return try JSON(node: ["links" : ["login" : "http://localhost:8080/login"]])
+		return try JSON(node: user.makeNode())
 	} catch let e as TurnstileError {
 		return try JSON(node: [
 			"Exception raised": e.description
@@ -78,8 +78,8 @@ drop.grouped(BasicAuthenticationMiddleware(), protect).group("api") { api in
 }
 
 // MARK: /socks/
-drop.grouped(SockURLMiddleware(), protect).resource("socks", SockController())
-drop.grouped(SockURLMiddleware()).resource("socks", SockController())
+drop.grouped(SockURLMiddleware(), BasicAuthenticationMiddleware(), protect).resource("socks", SockController())
+
 
 
 
