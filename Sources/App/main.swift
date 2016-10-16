@@ -89,6 +89,11 @@ drop.grouped(BasicAuthenticationMiddleware(), protect).group("socks") {socks in
 		return try controller.showMine(request: request)
 	}
 
+	socks.post("sorted") { request in
+		let controller = SockController()
+		return try controller.sorted(request: request)
+	}
+
 }
 
 

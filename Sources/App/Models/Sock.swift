@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import Foundation
 
 
 struct Sock: Model {
@@ -56,8 +57,8 @@ extension Sock: Preparation {
 			socks.string("desc", optional: true)
 			socks.string("name", optional: true)
 			socks.string("img", optional: true)
-			socks.double("lat", optional: true)
-			socks.double("lon", optional: true)
+			socks.double("lat", optional: false)
+			socks.double("lon", optional: false)
 			socks.int("time", optional: true)
 			socks.parent(DemoUser.self, optional: false)
 			
@@ -84,5 +85,21 @@ extension Sock {
 extension Sock {
 	func user() throws -> Parent<DemoUser> {
 		return try parent(demouser_id, nil, DemoUser.self)
+	}
+
+	func distance(lat: Double, lon: Double) -> Double {
+		let R = 6371.0
+		let dLat = (lat - self.lat!) * 3.14 / 180
+		let dLon = (lon - self.lon!) * 3.14 / 180
+		let latRad1 = self.lat! * 3.14 / 180
+		let latRad2 = lat * 3.14 / 180
+
+		let a1 = sin(dLat/2) * sin(dLat/2)
+		let a2 = sin(dLon/2) * sin(dLon/2) * cos(latRad1) * cos(latRad2)
+
+		let a = a1 + a2
+		let c = 2 * atan2(sqrt(a),sqrt(1-a))
+		return R * c
+
 	}
 }
