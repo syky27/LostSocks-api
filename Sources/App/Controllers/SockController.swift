@@ -10,12 +10,9 @@ import HTTP
 import Vapor
 
 final class SockController: ResourceRepresentable {
-	// GET [/socks]
 
 	class func setup() {
 		drop.grouped(SockURLMiddleware(), BasicAuthenticationMiddleware(), protect).resource("socks", SockController())
-
-
 		drop.grouped(BasicAuthenticationMiddleware(), protect).group("socks") {socks in
 			socks.get("mine"){request in
 				let controller = SockController()
@@ -35,6 +32,7 @@ final class SockController: ResourceRepresentable {
 		}
 	}
 
+	// GET [/socks]
 	func index(request: Request) throws -> ResponseRepresentable {
 		return try Sock.all().makeNode().converted(to: JSON.self)
 	}
@@ -81,8 +79,6 @@ final class SockController: ResourceRepresentable {
 	}
 
 	func makeResource() -> Resource<Sock> {
-
-
 		return Resource(
 			index: index,
 			store: create,
