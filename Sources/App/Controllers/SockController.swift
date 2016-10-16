@@ -18,16 +18,20 @@ final class SockController: ResourceRepresentable {
 	// POST [/socks]
 	func create(request: Request) throws -> ResponseRepresentable {
 		let user  = try request.user()
-		print(user.json())
 		var sock = try request.sock()
 		sock.demouser_id = user.id
 		try sock.save()
 		return sock
 	}
 
-	// GET [/socks/1
+	// GET [/socks/1]
 	func show(request: Request, sock: Sock) throws -> ResponseRepresentable {
 		return sock
+	}
+
+	func showMine(request: Request) throws -> ResponseRepresentable {
+		let user = try request.user()
+		return try Sock.query().filter("demouser_id", user.id!).run().makeNode().converted(to: JSON.self)
 	}
 
 	// DELETE [/socks/1]
@@ -68,6 +72,8 @@ final class SockController: ResourceRepresentable {
 			clear: clear
 		)
 	}
+
+
 
 }
 

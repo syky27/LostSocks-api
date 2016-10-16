@@ -75,10 +75,21 @@ drop.grouped(BasicAuthenticationMiddleware(), protect).group("api") { api in
 	api.get("me") { request in
 		return try JSON(node: request.user().makeNode())
 	}
+
+
 }
 
 // MARK: /socks/
 drop.grouped(SockURLMiddleware(), BasicAuthenticationMiddleware(), protect).resource("socks", SockController())
+
+
+drop.grouped(BasicAuthenticationMiddleware(), protect).group("socks") {socks in
+	socks.get("mine"){request in
+		let controller = SockController()
+		return try controller.showMine(request: request)
+	}
+
+}
 
 
 
