@@ -32,6 +32,13 @@ final class SockController: ResourceRepresentable {
 		}
 	}
 
+	func validate(request: Request) throws -> Bool {
+		let user = try request.user()
+		let sock = try request.sock()
+		return sock.belongs(to: user)
+
+	}
+
 	// GET [/socks]
 	func index(request: Request) throws -> ResponseRepresentable {
 		return try Sock.all().makeNode().converted(to: JSON.self)
@@ -53,8 +60,16 @@ final class SockController: ResourceRepresentable {
 
 	// DELETE [/socks/1]
 	func delete(request: Request, sock: Sock) throws -> ResponseRepresentable {
-		try sock.delete()
-		return JSON([:])
+		print("Enter delete")
+
+		let user = try request.user()
+		if sock.demouser_id == user.id {
+			print("User Check success")
+			try sock.delete()
+			return JSON([:])
+		}
+		
+		return JSON(["Forbidden" : "That sock aint yours to modify"])
 	}
 
 	// DELETE [/socks]

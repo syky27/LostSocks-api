@@ -87,8 +87,11 @@ extension Sock {
 		return try parent(demouser_id, nil, DemoUser.self)
 	}
 
-	func distance(lat: Double, lon: Double) -> Double {
+func belongs(to: DemoUser) -> Bool {
+		return self.demouser_id == to.id
+	}
 
+	func distance(lat: Double, lon: Double) -> Double {
 		// This is workaround when the GPS location is missing
 		guard let localLat = self.lat,
 			let localLon = self.lon else {
