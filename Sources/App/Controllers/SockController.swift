@@ -12,24 +12,7 @@ import Vapor
 final class SockController: ResourceRepresentable {
 
 	class func setup() {
-		drop.grouped(SockURLMiddleware(), BasicAuthenticationMiddleware(), protect).resource("socks", SockController())
-		drop.grouped(BasicAuthenticationMiddleware(), protect).group("socks") {socks in
-			socks.get("mine"){request in
-				let controller = SockController()
-				return try controller.showMine(request: request)
-			}
-
-			socks.post("sorted") { request in
-				let controller = SockController()
-				return try controller.sorted(request: request)
-			}
-
-			socks.post("multiple") { request in
-				let controller = SockController()
-				return try controller.multiple(request: request)
-			}
-			
-		}
+		
 	}
 
 	func validate(request: Request) throws -> Bool {
@@ -68,7 +51,7 @@ final class SockController: ResourceRepresentable {
 			try sock.delete()
 			return JSON([:])
 		}
-		
+
 		return JSON(["Forbidden" : "That sock aint yours to modify"])
 	}
 

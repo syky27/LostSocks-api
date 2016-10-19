@@ -7,6 +7,9 @@
 //
 
 import XCTest
+import Vapor
+import HTTP
+import Turnstile
 
 
 class HelloWorldTests: XCTestCase {
@@ -23,12 +26,17 @@ class HelloWorldTests: XCTestCase {
     }
 
     func testExample() {
-		XCTAssert(HelloWorld() != nil)
+		let drop = try! fireUpServer()
 
-		
+		let registerRequest = try! Request(method: .post, uri: "/register")
+		registerRequest.headers = ["Content-Type" : "application/json"]
+		registerRequest.body = JSON(["username" : "username",
+		                     "password" : "password"]).makeBody()
+		let registerResponse = try! drop.respond(to: registerRequest)
 
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+		print(registerResponse)
+
+
     }
 
     func testPerformanceExample() {
