@@ -100,7 +100,7 @@ func belongs(to: DemoUser) -> Bool {
 		// This is workaround when the GPS location is missing
 		guard let localLat = self.lat,
 			let localLon = self.lon else {
-				return Double(INT64_MAX)
+				return Double(3000000)
 		}
 
 		let R = 6371.0
