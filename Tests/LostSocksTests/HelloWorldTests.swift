@@ -28,7 +28,7 @@ class HelloWorldTests: XCTestCase {
     func testExample() {
 		let drop = try! fireUpServer()
 
-		let registerRequest = try! Request(method: .post, uri: "/register")
+		let registerRequest = try! Request(method: .post, uri: "/register")
 		registerRequest.headers = ["Content-Type" : "application/json"]
 		registerRequest.body = JSON(["username" : "username",
 		                     "password" : "password"]).makeBody()

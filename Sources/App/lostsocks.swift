@@ -108,6 +108,12 @@ func fireUpServer() throws -> Droplet {
 			return try controller.multiple(request: request)
 		}
 
+		socks.post(Int.self) { request, sockID in
+			let controller = SockController()
+			return try controller.upload(request: request, sockID: sockID)
+
+		}
+
 	}
 
 

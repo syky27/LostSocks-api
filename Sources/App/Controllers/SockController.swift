@@ -8,12 +8,9 @@
 
 import HTTP
 import Vapor
+import Foundation
 
 final class SockController: ResourceRepresentable {
-
-	class func setup() {
-		
-	}
 
 	func validate(request: Request) throws -> Bool {
 		let user = try request.user()
@@ -127,6 +124,33 @@ final class SockController: ResourceRepresentable {
 		} catch(let e){
 			return try! JSON(node: ["Exception Raised":e.localizedDescription])
 		}
+	}
+
+	func upload(request: Request, sockID: Int) throws -> ResponseRepresentable {
+		guard let image = request.multipart?["image"]?.file else {
+			throw Abort.badRequest
+		}
+
+		let dataFile = Data(bytes: image.data)
+		let fileName = NSUUID().uuidString
+
+		guard var sock = try Sock.query().filter("id", String(sockID)).first() else {
+			throw Abort.badRequest
+		}
+		sock.imageName = fileName
+		try sock.save()
+
+
+		let fileURL = try! FileManager.default.url(for: .desktopDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(fileName + ".png")
+
+		do {
+			try dataFile.write(to: fileURL, options: .atomic)
+		} catch {
+			print(error)
+		}
+
+
+		return JSON([])
 	}
 
 }
