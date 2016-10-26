@@ -1,8 +1,0 @@
-{
-  "host": "37.205.10.168",
-  "user": "username",
-  "password": "password",
-  "database": "LostSocks",
-  "port": "3306",
-  "encoding": "utf8"
-}
