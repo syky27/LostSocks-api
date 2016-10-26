@@ -42,7 +42,7 @@ func fireUpServer() throws -> Droplet {
 
 		do {
 			try request.auth.login(credentials)
-			let fetchedUser = try DemoUser.query()
+			_ = try DemoUser.query()
 				.filter("username", credentials.username)
 				.first()
 

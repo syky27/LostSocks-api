@@ -132,92 +132,20 @@ final class SockController: ResourceRepresentable {
 			throw Abort.badRequest
 		}
 
-
-
 		let dataFile = Data(bytes: image.data)
 		let imageBase64 = dataFile.base64EncodedString()
-		let fileName = NSUUID().uuidString
 
 		guard var sock = try Sock.query().filter("id", String(sockID)).first() else {
 			throw Abort.badRequest
 		}
-		sock.image = imageBase64
+		sock.imageBase64 = imageBase64
 		try sock.save()
 
-
-//		let fileURL = try! FileManager.default.url(for: .desktopDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(fileName + ".png")
-//
-//		do {
-//			try dataFile.write(to: fileURL, options: .atomic)
-//		} catch {
-//			print(error)
-//		}
-
-//		let client = try! BasicClient(scheme: "https", host: "api.cloudinary.com")
-//
-//
-//		let timestamp = Date().timeIntervalSince1970
-//		let strTimestamp = String(timestamp)
-//		let apiSecret = "hRt95enlDtgl5ExGDGm7IeXhl1Q"
-//		let apiKey = "546779356914594"
-//
-//		let signature = "public_id=\(fileName)&timestamp=\(strTimestamp)\(apiSecret)".sha1()
-//
-//		print(strTimestamp)
-//		print(signature)
-//
-//
-//		var json = Node([:])
-//		json["api_key"] = Node(apiKey)
-//		json["public_id"] = Node(fileName)
-//		json["timestamp"] = Node(strTimestamp)
-//		json["signature"] = Node(signature)
-//		json["file"] = Node.bytes(image.data)
-//
-//		print(image.data)
-//
-//
-//		
-//
-//
-//		return try client.post(path: "/v1_1/lostsocks/image/upload",
-//		                       headers: ["Content-Type":"application/json"],
-//		                       body: JSON(json).makeBody())
-
-
-		let client = try! BasicClient(scheme: "https", host: "upload.uploadcare.com")
-
-
-		var json = Node([:])
-		json["UPLOADCARE_PUB_KEY"] = Node("5fed7d0097b425adaa5e")
-		json["UPLOADCARE_STORE"] = Node(Int(1))
-		json["file"] = Node.bytes(image.data)
-		json["jsonerrors"] = Node(Int(1))
-
-
-		let response = try client.post(path: "/base/",
-		                               headers: [:],
-		                       body: JSON(json).makeBody())
-
-		print(response)
-
-
-		return response
+		return JSON([:])
 
 	}
 
 }
-
-func shell(args: String...) -> Int32 {
-	let task = Process()
-	task.launchPath = "/usr/bin/env"
-	task.arguments = args
-	task.launch()
-	task.waitUntilExit()
-	return task.terminationStatus
-}
-
-
 
 extension Request {
 	func sock() throws -> Sock {

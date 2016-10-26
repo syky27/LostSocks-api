@@ -11,7 +11,7 @@ struct Sock: Model {
 	var time: Int?
 	var lat: Double?
 	var lon: Double?
-	var image: String?
+	var imageBase64: String?
 	var demouser_id: Node?
 
 	var exists: Bool = false
@@ -29,7 +29,7 @@ extension Sock: NodeConvertible {
 		time = node["time"]?.int
 		lat = node["lat"]?.double
 		lon = node["lon"]?.double
-		image = node["imageName"]?.string
+		imageBase64 = node["imageBase64"]?.string
 		demouser_id = node["demouser_id"]
 	}
 
@@ -46,7 +46,7 @@ extension Sock: NodeConvertible {
 				"time": time,
 				"lat" : lat,
 				"lon" : lon,
-				"imageName": image,
+				"imageBase64": imageBase64,
 				"demouser_id" : demouser_id
 			]
 		)
@@ -62,7 +62,7 @@ extension Sock: Preparation {
 			socks.string("img", optional: true)
 			socks.double("lat", optional: false)
 			socks.double("lon", optional: false)
-			socks.string("image", optional: true)
+			socks.string("imageBase64", optional: true)
 			socks.int("time", optional: true)
 			socks.parent(DemoUser.self, optional: false)
 			
@@ -83,7 +83,7 @@ extension Sock {
 		time = updates.time ?? time
 		lat = updates.lat ?? lat
 		lon = updates.lon ?? lon
-		image = updates.image ?? image
+		imageBase64 = updates.imageBase64 ?? imageBase64
 	}
 }
 
