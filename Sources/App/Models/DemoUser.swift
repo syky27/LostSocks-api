@@ -189,7 +189,7 @@ final class DemoUser: User {
 
 
 	static func revert(_ database: Database) throws {
-		fatalError("unimplemented \(#function)")
+		try database.delete("demousers")
 	}
 }
 
