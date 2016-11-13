@@ -28,7 +28,7 @@ func fireUpServer() throws -> Droplet {
 		preparations: [Sock.self, DemoUser.self, Pivot<Sock, DemoUser>.self],
 		providers: [VaporPostgreSQL.Provider.self])
 
-    
+        print(drop.config)
 
 	drop.get("login") { request in
 		return try drop.view.make("login")
