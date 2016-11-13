@@ -1,7 +1,3 @@
 {
-    "host": "$HOST",
-    "user": "$USER",
-    "password": "$PASSWORD",
-    "database": "$DATABASE",
-    "port": $PORT
+    "url": "$DATABASE_URL"
 }
