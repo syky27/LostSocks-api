@@ -17,7 +17,7 @@ final class Sock: Model {
 
     init(node: Node, in context: Context) throws {
         id = node["id"]
-        d = node["desc"]?.string
+        d = node["d"]?.string
         name = node["name"]?.string
         img = node["img"]?.string
         time = node["time"]?.int
@@ -35,7 +35,7 @@ final class Sock: Model {
             [
                 "id": id,
                 "name": name,
-                "desc": d,
+                "d": d,
                 "img": img,
                 "time": time,
                 "lat" : lat,
