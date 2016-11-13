@@ -8,7 +8,7 @@
 
 import Foundation
 import Vapor
-import VaporMySQL
+import VaporPostgreSQL
 import Auth
 import HTTP
 import Cookies
@@ -21,16 +21,22 @@ import Fluent
 func fireUpServer() throws -> Droplet {
 	let auth = AuthMiddleware<DemoUser>()
 
+
 	let drop = Droplet(
 		availableMiddleware: ["cors" : CorsMiddleware(), "auth": auth, "trustProxy": TrustProxyMiddleware()],
 		serverMiddleware: ["file", "cors", "auth", "trustProxy"],
 		preparations: [Sock.self, DemoUser.self, Pivot<Sock, DemoUser>.self],
-		providers: [VaporMySQL.Provider.self])
+		providers: [VaporPostgreSQL.Provider.self])
 
 
 	drop.get("login") { request in
 		return try drop.view.make("login")
 	}
+
+    drop.get("register") { request in
+        return try drop.view.make("register")
+
+    }
 
 	drop.post("login") { request in
 		guard let username = request.json?["username"]?.string,
@@ -85,12 +91,12 @@ func fireUpServer() throws -> Droplet {
 		api.get("me") { request in
 			return try JSON(node: request.user().makeNode())
 		}
-		
-		
+
+
 	}
-	
+
 	// MARK: /socks/
-	
+
 	drop.grouped(SockURLMiddleware(), BasicAuthenticationMiddleware(), protect).resource("socks", SockController())
 	drop.grouped(BasicAuthenticationMiddleware(), protect).group("socks") {socks in
 		socks.get("mine"){request in

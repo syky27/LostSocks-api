@@ -1,5 +1,5 @@
 import Vapor
-import VaporMySQL
+import VaporPostgreSQL
 import Auth
 import HTTP
 import Cookies
